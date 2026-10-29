@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Place Order | VAN GAME STORE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #08070d;
+      color: #f7f4ff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    .order-wrap {
+      width: 92%;
+      max-width: 560px;
+      margin: 24px auto 100px;
+    }
+    .order-heading {
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .order-subtitle {
+      color: #aaa3bb;
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+    .order-card {
+      background: #14111d;
+      border: 1px solid #352449;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 25px #0005;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #d8b4fe;
+    }
+    .package-name {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      overflow-wrap: anywhere;
+    }
+    .package-price {
+      color: #c084fc;
+      font-size: 23px;
+      font-weight: 800;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      color: #ded7ec;
+      margin: 15px 0 7px;
+    }
+    .order-input, .order-select {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #443253;
+      background: #0c0a12;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+    .order-input:focus, .order-select:focus {
+      border-color: #a855f7;
+    }
+    .order-button {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      background: linear-gradient(100deg, #7c3aed, #a855f7);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .order-button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+    .order-note {
+      color: #aaa3bb;
+      font-size: 12px;
+      line-height: 1.7;
+      margin-top: 13px;
+    }
+    .back-link {
+      display: inline-block;
+      color: #d8b4fe;
+      text-decoration: none;
+      margin-bottom: 18px;
+    }
+    .notice {
+      display: none;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
+      background: #211729;
+      border: 1px solid #65418a;
+      color: #ead7ff;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <main class="order-wrap">
+    <a class="back-link" href="shop.html">← Back to Shop</a>
+
+    <div class="order-heading">📝 Place Your Order</div>
+    <div class="order-subtitle">
+      VAN GAME STORE — Order Information
+    </div>
+
+    <section class="order-card">
+      <div class="section-title">🎮 Selected Package</div>
+      <div class="package-name" id="packageName">Package မရွေးရသေးပါ</div>
+      <div class="package-price" id="packagePrice">0 MMK</div>
+      <div class="order-note">
+        Package မှားနေရင် Shop Page ကိုပြန်သွားပြီး ရွေးနိုင်ပါတယ်။
+      </div>
+    </section>
+
+    <form id="orderForm">
+      <section class="order-card">
+        <div class="section-title">🎯 Game Information</div>
+
+        <label class="form-label" for="game">Game</label>
+        <select class="order-select" id="game" required>
+          <option value="mlbb">Mobile Legends (MLBB)</option>
+          <option value="pubg">PUBG Mobile</option>
+          <option value="roblox">Roblox</option>
+        </select>
+
+        <label class="form-label" for="playerId">Player ID / Game ID</label>
+        <input class="order-input" id="playerId" type="text"
+          placeholder="သင့် Game ID ထည့်ပါ" maxlength="40" required>
+
+        <div id="serverField">
+          <label class="form-label" for="serverId">Server ID (MLBB အတွက်)</label>
+          <input class="order-input" id="serverId" type="text"
+            placeholder="ဥပမာ - 1234" maxlength="20">
+        </div>
+      </section>
+
+      <section class="order-card">
+        <div class="section-title">👤 Customer Information</div>
+
+        <label class="form-label" for="customerName">ဝယ်သူအမည်</label>
+        <input class="order-input" id="customerName" type="text"
+          placeholder="အမည်ထည့်ပါ" maxlength="60" required>
+
+        <label class="form-label" for="customerPhone">ဆက်သွယ်ရန် ဖုန်းနံပါတ်</label>
+        <input class="order-input" id="customerPhone" type="tel"
+          placeholder="ဖုန်းနံပါတ်ထည့်ပါ" maxlength="25" required>
+      </section>
+
+      <section class="order-card">
+        <div class="section-title">💳 Payment Information</div>
+
+        <label class="form-label" for="payment">ငွေပေးချေမည့်နည်းလမ်း</label>
+        <select class="order-select" id="payment" required>
+          <option value="">ရွေးချယ်ပါ</option>
+          <option value="KBZPay">KBZPay</option>
+          <option value="WavePay">WavePay</option>
+          <option value="Other">အခြားနည်းလမ်း</option>
+        </select>
+
+        <div class="order-note">
+          ⚠️ ငွေပေးချေမှုကို Website က အလိုအလျောက် အတည်ပြုမပေးပါ။
+          ငွေမလွှဲခင် ဆိုင်ရဲ့ အတည်ပြုချက်ကို ရယူပါ။
+        </div>
+
+        <button class="order-button" id="submitButton" type="submit">
+          Confirm Order
+        </button>
+        <div class="notice" id="orderNotice" role="status"></div>
+      </section>
+    </form>
+  </main>
+
+  <script type="module">
+    import { auth, db } from "./firebase.js";
+
+    import {
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    import {
+      addDoc,
+      collection,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+    const params = new URLSearchParams(location.search);
+
+    const gameNames = {
+      mlbb: "Mobile Legends (MLBB)",
+      pubg: "PUBG Mobile",
+      roblox: "Roblox"
+    };
+
+    const gameSelect = document.getElementById("game");
+    const playerId = document.getElementById("playerId");
+    const serverId = document.getElementById("serverId");
+    const serverField = document.getElementById("serverField");
+    const packageName = document.getElementById("packageName");
+    const packagePrice = document.getElementById("packagePrice");
+    const notice = document.getElementById("orderNotice");
+    const form = document.getElementById("orderForm");
+    const submitButton = document.getElementById("submitButton");
+
+    let currentUser = null;
+    let authReady = false;
+    let isSubmitting = false;
+
+    let selectedGame = params.get("game") || "mlbb";
+    if (!gameNames[selectedGame]) selectedGame = "mlbb";
+
+    const selectedPackage = (params.get("package") || "").trim();
+    const rawPrice = params.get("price") || "0";
+    const selectedPrice = /^\d+$/.test(rawPrice)
+      ? Number(rawPrice)
+      : 0;
+
+    gameSelect.value = selectedGame;
+    packageName.textContent = selectedPackage || "Package မရွေးရသေးပါ";
+    packagePrice.textContent =
+      selectedPrice.toLocaleString("en-US") + " MMK";
+
+    function showNotice(message, success = false) {
+      notice.style.display = "block";
+      notice.style.background = success ? "#17251d" : "#211729";
+      notice.style.borderColor = success ? "#34734b" : "#65418a";
+      notice.style.color = success ? "#b7f7c8" : "#ead7ff";
+      notice.textContent = message;
+    }
+
+    function updateGameFields() {
+      const isMLBB = gameSelect.value === "mlbb";
+      serverField.style.display = isMLBB ? "block" : "none";
+      serverId.required = isMLBB;
+      if (!isMLBB) serverId.value = "";
+    }
+
+    gameSelect.addEventListener("change", updateGameFields);
+    updateGameFields();
+
+    submitButton.disabled = true;
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      authReady = true;
+      submitButton.disabled = !user;
+      submitButton.textContent = user
+        ? "Confirm Order"
+        : "Login အရင်ဝင်ပါ";
+
+      if (!user) {
+        showNotice("Order တင်ရန် Login အရင်ဝင်ပါ။");
+      } else {
+        notice.style.display = "none";
+      }
+    }, (error) => {
+      authReady = true;
+      currentUser = null;
+      submitButton.disabled = true;
+      showNotice("Login စစ်ဆေးမရပါ။ " + error.code);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (isSubmitting) return;
+
+      if (!authReady) {
+        showNotice("Login အခြေအနေကို စစ်ဆေးနေပါတယ်။ ခဏစောင့်ပါ။");
+        return;
+      }
+
+      if (!currentUser) {
+        showNotice("Order တင်ရန် Login ဝင်ထားဖို့ လိုပါတယ်။");
+        return;
+      }
+
+      if (!selectedPackage || selectedPrice <= 0) {
+        showNotice("Shop Page ကိုပြန်သွားပြီး Package ရွေးပါ။");
+        return;
+      }
+
+      const customerName =
+        document.getElementById("customerName").value.trim();
+      const customerPhone =
+        document.getElementById("customerPhone").value.trim();
+      const payment = document.getElementById("payment").value;
+      const game = gameSelect.value;
+      const cleanPlayerId = playerId.value.trim();
+      const cleanServerId = game === "mlbb" ? serverId.value.trim() : "";
+
+      if (!customerName || !customerPhone || !cleanPlayerId || !payment) {
+        showNotice("လိုအပ်တဲ့ အချက်အလက်အားလုံး ဖြည့်ပေးပါ။");
+        return;
+      }
+
+      const orderId = "VGS-" + Date.now();
+
+      const order = {
+        id: orderId,
+        userId: currentUser.uid,
+        game: game,
+        gameName: gameNames[game],
+        package: selectedPackage,
+        price: selectedPrice,
+        playerId: cleanPlayerId,
+        serverId: cleanServerId,
+        customerName: customerName,
+        customerPhone: customerPhone,
+        payment: payment,
+        status: "Pending",
+        createdAt: serverTimestamp()
+      };
+
+      isSubmitting = true;
+      submitButton.disabled = true;
+      submitButton.textContent = "Order သိမ်းနေပါတယ်...";
+
+      try {
+        await addDoc(collection(db, "orders"), order);
+
+        showNotice(
+          "✅ Order တင်ပြီးပါပြီ!\n" +
+          "Order ID: " + orderId +
+          "\nStatus: Pending\n" +
+          "ငွေပေးချေမှုကို ဆိုင်က အတည်ပြုပြီးမှ ဆက်လုပ်ပါ။",
+          true
+        );
+
+        form.reset();
+        gameSelect.value = selectedGame;
+        updateGameFields();
+
+      } catch (error) {
+        console.error("Order save error:", error);
+        showNotice(
+          "Order သိမ်းမရသေးပါ။ Firebase Rules နဲ့ Login ကို စစ်ပါ။\nError: " +
+          (error.code || error.message)
+        );
+      } finally {
+        isSubmitting = false;
+        submitButton.disabled = !currentUser;
+        submitButton.textContent = currentUser
+          ? "Confirm Order"
+          : "Login အရင်ဝင်ပါ";
+      }
+    });
+  </script>
+</body>
+</html>

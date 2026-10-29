@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0714">
+  <title>VAN GAME STORE | Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .shop-search {
+      width: 100%;
+      padding: 14px;
+      border-radius: 13px;
+      background: #151020;
+      border: 1px solid #332344;
+      color: white;
+      outline: none;
+      margin-top: 18px;
+    }
+    .shop-search:focus { border-color: #b56cff; }
+    .game-tabs {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 9px;
+      margin-top: 17px;
+    }
+    .game-tab {
+      padding: 13px 4px;
+      border-radius: 13px;
+      background: #151020;
+      color: #b9adc9;
+      border: 1px solid #332344;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .game-tab.active {
+      background: #29183e;
+      border-color: #b56cff;
+      color: #dfc2ff;
+    }
+    .shop-banner {
+      margin-top: 22px;
+      padding: 21px;
+      border-radius: 18px;
+      border: 1px solid #51346d;
+      background: radial-gradient(ellipse at top right,#7935ba66,transparent 65%),#171020;
+    }
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .package {
+      min-width: 0;
+      padding: 15px 12px;
+      text-align: left;
+      border-radius: 16px;
+      background: #151020;
+      border: 1px solid #332344;
+      color: white;
+    }
+    .package.active {
+      background: #29183e;
+      border-color: #bd83ff;
+      box-shadow: 0 0 16px #9b3cff20;
+    }
+    .package-icon { font-size: 27px; }
+    .package-name { margin-top: 12px; font-size: 13px; font-weight: 800; }
+    .package-price { margin-top: 9px; color: #d0a0ff; font-size: 14px; font-weight: 800; }
+    .package-hint { margin-top: 6px; color: #a69ab8; font-size: 10px; }
+    .selection-box {
+      margin-top: 22px;
+      padding: 17px;
+      border: 1px solid #49305f;
+      border-radius: 16px;
+      background: #191126;
+    }
+    .empty-state {
+      padding: 24px 12px;
+      color: #a69ab8;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-logo">V</div>
+      <div>
+        <div class="brand-name">VAN GAME STORE</div>
+        <div class="brand-sub">PREMIUM GAMING</div>
+      </div>
+    </a>
+    <a href="login.html" class="header-login">Login ↗</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="shop-banner">
+    <p class="eyebrow">OFFICIAL GAME SHOP</p>
+    <h1 style="font-size:27px;font-weight:900;margin-top:12px">
+      Choose Your <span style="color:#bd83ff">Package.</span>
+    </h1>
+    <p style="font-size:12px;color:#c2b7d0;line-height:1.9;margin-top:10px">
+      ကိုယ်ဝယ်ယူချင်တဲ့ Game နဲ့ Package ကိုရွေးချယ်ပါ။
+    </p>
+  </section>
+
+  <input
+    type="search"
+    id="searchInput"
+    class="shop-search"
+    placeholder="🔎  Package ရှာရန်..."
+    aria-label="Search packages"
+  >
+
+  <div class="game-tabs">
+    <button class="game-tab active" data-game="mlbb">⚔️ MLBB</button>
+    <button class="game-tab" data-game="pubg">🎯 PUBG</button>
+    <button class="game-tab" data-game="roblox">🧊 Roblox</button>
+  </div>
+
+  <section class="section">
+    <div class="section-top">
+      <div>
+        <p class="eyebrow">AVAILABLE ITEMS</p>
+        <h2 class="section-title" id="gameTitle">MLBB Diamonds</h2>
+      </div>
+      <span class="see-all" id="packageCount">6 Packages</span>
+    </div>
+
+    <div id="packageGrid" class="package-grid"></div>
+    <div id="emptyState" class="empty-state" hidden></div>
+  </section>
+
+  <section class="selection-box">
+    <p class="eyebrow">YOUR SELECTION</p>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:13px">
+      <div>
+        <p style="font-size:11px;color:#a69ab8">Selected Package</p>
+        <h3 id="selectedName" style="font-size:14px;margin-top:7px">11 Diamonds</h3>
+      </div>
+      <div style="text-align:right">
+        <p style="font-size:11px;color:#a69ab8">Price</p>
+        <h3 id="selectedPrice" style="font-size:17px;color:#d0a0ff;margin-top:7px">1,000 Ks</h3>
+      </div>
+    </div>
+
+    <button id="continueBtn" class="primary-btn"
+      style="width:100%;margin-top:19px">
+      CONTINUE TO ORDER →
+    </button>
+    <p style="font-size:10px;line-height:1.8;color:#a69ab8;margin-top:12px">
+      ဈေးနှုန်းများသည် နမူနာဖြစ်သည်။ ဝယ်ယူမှုမလုပ်ခင် ဆိုင်၏ အမှန်တကယ်ဈေးနှုန်းကို အတည်ပြုပါ။
+    </p>
+  </section>
+
+  <footer class="footer">
+    <strong style="color:#d0a0ff">VAN GAME STORE</strong>
+    <p>YOUR GAME. YOUR LEVEL. YOUR STORE.</p>
+    <p>© 2026 VAN GAME STORE</p>
+  </footer>
+
+</main>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <span class="nav-icon">⌂</span><span>Home</span>
+  </a>
+  <a href="shop.html" class="nav-item active">
+    <span class="nav-icon">🎮</span><span>Shop</span>
+  </a>
+  <a href="order.html" class="nav-item order-nav">
+    <span class="nav-icon">＋</span><span>Order</span>
+  </a>
+  <a href="orders.html" class="nav-item">
+    <span class="nav-icon">▤</span><span>Orders</span>
+  </a>
+  <a href="profile.html" class="nav-item">
+    <span class="nav-icon">♙</span><span>Profile</span>
+  </a>
+</nav>
+
+<script>
+const catalog = {
+  mlbb: {
+    title: "MLBB Diamonds",
+    items: [
+      {name:"11 Diamonds", price:1000},
+      {name:"22 Diamonds", price:2000},
+      {name:"56 Diamonds", price:4500},
+      {name:"86 Diamonds", price:6500},
+      {name:"172 Diamonds", price:12500},
+      {name:"257 Diamonds", price:18500}
+    ]
+  },
+  pubg: {
+    title: "PUBG Mobile UC",
+    items: [
+      {name:"60 UC", price:3500},
+      {name:"325 UC", price:16000},
+      {name:"660 UC", price:32000},
+      {name:"1800 UC", price:80000},
+      {name:"3850 UC", price:145000},
+      {name:"8100 UC", price:290000}
+    ]
+  },
+  roblox: {
+    title: "Roblox",
+    items: []
+  }
+};
+
+let currentGame = "mlbb";
+let selectedPackage = null;
+
+const grid = document.getElementById("packageGrid");
+const title = document.getElementById("gameTitle");
+const count = document.getElementById("packageCount");
+const empty = document.getElementById("emptyState");
+const search = document.getElementById("searchInput");
+
+function formatPrice(price) {
+  return price.toLocaleString("en-US") + " Ks";
+}
+
+function renderPackages() {
+  const game = catalog[currentGame];
+  const query = search.value.trim().toLowerCase();
+
+  title.textContent = game.title;
+  grid.replaceChildren();
+
+  const filtered = game.items.filter(item =>
+    item.name.toLowerCase().includes(query)
+  );
+
+  count.textContent = filtered.length + " Packages";
+  empty.hidden = filtered.length !== 0;
+
+  if (game.items.length === 0) {
+    empty.hidden = false;
+    empty.textContent = "ဒီ Game အတွက် Package များကို မကြာမီ ထည့်သွင်းပေးပါမည်။";
+  } else if (filtered.length === 0) {
+    empty.textContent = "ရှာဖွေမှုနဲ့ ကိုက်ညီတဲ့ Package မရှိပါ။";
+  }
+
+  filtered.forEach(item => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "package";
+    btn.setAttribute("aria-pressed", "false");
+
+    const icon = document.createElement("div");
+    icon.className = "package-icon";
+    icon.textContent = currentGame === "mlbb" ? "💎" : "🪙";
+
+    const name = document.createElement("div");
+    name.className = "package-name";
+    name.textContent = item.name;
+
+    const price = document.createElement("div");
+    price.className = "package-price";
+    price.textContent = formatPrice(item.price);
+
+    const hint = document.createElement("div");
+    hint.className = "package-hint";
+    hint.textContent = "Select Package ↗";
+
+    btn.append(icon, name, price, hint);
+
+    btn.addEventListener("click", () => {
+      selectedPackage = item;
+      updateSelection();
+
+      grid.querySelectorAll(".package").forEach(card => {
+        card.classList.remove("active");
+        card.setAttribute("aria-pressed", "false");
+      });
+
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+    });
+
+    grid.appendChild(btn);
+  });
+
+  if (!selectedPackage || !game.items.includes(selectedPackage)) {
+    selectedPackage = filtered[0] || null;
+  }
+
+  updateSelection();
+}
+
+function updateSelection() {
+  document.getElementById("selectedName").textContent =
+    selectedPackage ? selectedPackage.name : "Package မရွေးရသေးပါ";
+
+  document.getElementById("selectedPrice").textContent =
+    selectedPackage ? formatPrice(selectedPackage.price) : "—";
+
+  grid.querySelectorAll(".package").forEach(btn => {
+    const isSelected = selectedPackage &&
+      btn.querySelector(".package-name").textContent === selectedPackage.name;
+
+    btn.classList.toggle("active", Boolean(isSelected));
+    btn.setAttribute("aria-pressed", String(Boolean(isSelected)));
+  });
+}
+
+document.querySelectorAll(".game-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentGame = btn.dataset.game;
+
+    document.querySelectorAll(".game-tab").forEach(tab => {
+      tab.classList.toggle("active", tab === btn);
+    });
+
+    selectedPackage = null;
+    search.value = "";
+    renderPackages();
+  });
+});
+
+search.addEventListener("input", renderPackages);
+
+document.getElementById("continueBtn").addEventListener("click", () => {
+  if (!selectedPackage) {
+    alert("အရင်ဆုံး ဝယ်ယူလိုတဲ့ Package ကို ရွေးပါ။");
+    return;
+  }
+
+  const params = new URLSearchParams({
+    game: currentGame,
+    package: selectedPackage.name,
+    price: String(selectedPackage.price)
+  });
+
+  window.location.href = "order.html?" + params.toString();
+});
+
+const initialGame = new URLSearchParams(location.search).get("game");
+
+if (initialGame && catalog[initialGame]) {
+  currentGame = initialGame;
+  document.querySelectorAll(".game-tab").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.game === currentGame);
+  });
+}
+
+renderPackages();
+</script>
+
+</body>
+</html>

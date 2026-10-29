@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders | VAN GAME STORE</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #08070d;
+      color: #f7f4ff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .orders-wrap {
+      width: 92%;
+      max-width: 700px;
+      margin: 25px auto 100px;
+    }
+
+    .orders-title {
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .orders-subtitle {
+      color: #aaa3bb;
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    .orders-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .orders-toolbar select {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #443253;
+      background: #14111d;
+      color: white;
+      font-size: 14px;
+    }
+
+    .order-card {
+      background: #14111d;
+      border: 1px solid #352449;
+      border-radius: 16px;
+      padding: 17px;
+      margin-bottom: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .order-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .game-name {
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .order-id {
+      color: #aaa3bb;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      background: #352449;
+      color: #e9d5ff;
+    }
+
+    .status.pending {
+      background: #382b15;
+      color: #fcd98a;
+    }
+
+    .status.completed {
+      background: #153523;
+      color: #9cf0b5;
+    }
+
+    .status.cancelled {
+      background: #3b1b24;
+      color: #ffb4c0;
+    }
+
+    .order-detail {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid #30263b;
+      font-size: 14px;
+    }
+
+    .order-detail span:first-child {
+      color: #aaa3bb;
+    }
+
+    .order-detail span:last-child {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .order-price {
+      color: #c084fc;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 35px 18px;
+      background: #14111d;
+      border: 1px dashed #49345e;
+      border-radius: 16px;
+    }
+
+    .empty-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      color: #aaa3bb;
+      line-height: 1.7;
+    }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: none;
+      background: #8b5cf6;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      padding: 10px 13px;
+      border-radius: 10px;
+      border: 1px solid #653044;
+      background: #21121b;
+      color: #ffb4c0;
+      cursor: pointer;
+    }
+
+    .privacy-note {
+      font-size: 12px;
+      color: #aaa3bb;
+      line-height: 1.7;
+      margin-top: 22px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="orders-wrap">
+    <div class="orders-title">📋 My Orders</div>
+    <div class="orders-subtitle">
+      VAN GAME STORE — သင့် Order များ
+    </div>
+
+    <div class="orders-toolbar">
+      <select id="statusFilter" aria-label="Order status filter">
+        <option value="all">Order အားလုံး</option>
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+
+      <button class="clear-btn" id="refreshBtn" type="button">
+        ↻ Refresh
+      </button>
+    </div>
+
+    <div id="ordersList"></div>
+
+    <div class="privacy-note">
+      ⚠️ ဒီစာမျက်နှာက ဒီ Browser ထဲမှာ သိမ်းထားတဲ့ Order များကိုသာ
+      ပြသပေးပါတယ်။ အခြားဖုန်း၊ Browser သို့မဟုတ် Admin Panel နဲ့
+      မချိတ်ဆက်ရသေးပါ။
+    </div>
+  </main>
+
+  <script>
+    const ordersList = document.getElementById("ordersList");
+    const statusFilter = document.getElementById("statusFilter");
+
+    function safeText(value) {
+      return String(value ?? "");
+    }
+
+    function makeDetail(label, value) {
+      const row = document.createElement("div");
+      row.className = "order-detail";
+
+      const left = document.createElement("span");
+      left.textContent = label;
+
+      const right = document.createElement("span");
+      right.textContent = value;
+
+      row.append(left, right);
+      return row;
+    }
+
+    function getOrders() {
+      try {
+        const data = JSON.parse(
+          localStorage.getItem("vgs_orders") || "[]"
+        );
+
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function renderOrders() {
+      ordersList.replaceChildren();
+
+      const filter = statusFilter.value;
+      const orders = getOrders().filter(order => {
+        return filter === "all" || order.status === filter;
+      });
+
+      if (orders.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+
+        const icon = document.createElement("div");
+        icon.className = "empty-icon";
+        icon.textContent = "🎮";
+
+        const title = document.createElement("strong");
+        title.textContent = "Order မရှိသေးပါ";
+
+        const description = document.createElement("p");
+        description.textContent =
+          "Shop Page ကိုသွားပြီး Game Package ရွေးဝယ်နိုင်ပါတယ်။";
+
+        const link = document.createElement("a");
+        link.className = "action-btn";
+        link.href = "shop.html";
+        link.textContent = "Go to Shop";
+
+        empty.append(icon, title, description, link);
+        ordersList.appendChild(empty);
+        return;
+      }
+
+      orders.slice().reverse().forEach(order => {
+        const card = document.createElement("section");
+        card.className = "order-card";
+
+        const top = document.createElement("div");
+        top.className = "order-card-top";
+
+        const info = document.createElement("div");
+
+        const game = document.createElement("div");
+        game.className = "game-name";
+        game.textContent = safeText(order.gameName || order.game);
+
+        const id = document.createElement("div");
+        id.className = "order-id";
+        id.textContent = "Order ID: " + safeText(order.id);
+
+        info.append(game, id);
+
+        const status = document.createElement("span");
+        const currentStatus = [
+          "Pending", "Completed", "Cancelled"
+        ].includes(order.status) ? order.status : "Pending";
+
+        status.className = "status " + currentStatus.toLowerCase();
+        status.textContent = currentStatus;
+
+        top.append(info, status);
+        card.appendChild(top);
+
+        card.appendChild(
+          makeDetail("Package", safeText(order.package))
+        );
+
+        card.appendChild(
+          makeDetail(
+            "Game ID",
+            safeText(order.playerId || "-")
+          )
+        );
+
+        if (order.serverId) {
+          card.appendChild(
+            makeDetail("Server ID", safeText(order.serverId))
+          );
+        }
+
+        card.appendChild(
+          makeDetail(
+            "Payment",
+            safeText(order.payment || "-")
+          )
+        );
+
+        card.appendChild(
+          makeDetail(
+            "Date",
+            order.createdAt
+              ? new Date(order.createdAt).toLocaleString()
+              : "-"
+          )
+        );
+
+        const price = document.createElement("div");
+        price.className = "order-price";
+        price.style.marginTop = "15px";
+        price.textContent =
+          Number(order.price || 0).toLocaleString("en-US") + " MMK";
+
+        card.appendChild(price);
+        ordersList.appendChild(card);
+      });
+    }
+
+    statusFilter.addEventListener("change", renderOrders);
+
+    document.getElementById("refreshBtn").addEventListener(
+      "click",
+      renderOrders
+    );
+
+    renderOrders();
+  </script>
+</body>
+</html>

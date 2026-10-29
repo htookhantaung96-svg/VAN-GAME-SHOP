@@ -1,0 +1,377 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg: #0b0714;
+  --surface: #151020;
+  --surface2: #1d1530;
+  --purple: #b56cff;
+  --purple2: #873cff;
+  --text: #ffffff;
+  --muted: #a69ab8;
+  --border: #332344;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+  padding-bottom: 90px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.container {
+  width: min(100% - 32px, 480px);
+  margin: auto;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(11, 7, 20, .94);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.header-inner {
+  max-width: 480px;
+  margin: auto;
+  padding: 15px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.brand-logo {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d49aff, #792bff);
+  color: white;
+  font-size: 23px;
+  font-weight: 900;
+  box-shadow: 0 0 22px #923fff45;
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.brand-sub {
+  margin-top: 4px;
+  color: var(--purple);
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.header-login {
+  padding: 10px 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  color: #dfc8ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  margin-top: 22px;
+  padding: 28px 23px;
+  border: 1px solid #51346d;
+  border-radius: 25px;
+  background:
+    radial-gradient(ellipse at 100% 0%, #7935ba66, transparent 52%),
+    linear-gradient(145deg, #26133d, #100b1c 72%);
+}
+
+.hero::after {
+  content: "✦";
+  position: absolute;
+  right: 14px;
+  top: 34px;
+  color: #c58cff;
+  opacity: .18;
+  font-size: 115px;
+  pointer-events: none;
+}
+
+.hero-label {
+  color: #d4aaff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  margin-top: 17px;
+  font-size: clamp(31px, 8vw, 42px);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+.hero h1 span {
+  color: var(--purple);
+}
+
+.hero-desc {
+  max-width: 285px;
+  margin-top: 15px;
+  color: #c2b7d0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 22px;
+  padding: 14px 19px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #9c45ff, #7628e9);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 8px 24px #923fff40;
+  transition: transform .2s, filter .2s;
+}
+
+.primary-btn:active {
+  transform: scale(.97);
+  filter: brightness(1.15);
+}
+
+.section {
+  margin-top: 30px;
+}
+
+.section-top {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.eyebrow {
+  color: var(--purple);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.section-title {
+  margin-top: 7px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.see-all {
+  padding-bottom: 3px;
+  color: #cba2ff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.game-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #1b142a, #100c19);
+  transition: border-color .2s, transform .2s;
+}
+
+.game-card:active {
+  transform: scale(.98);
+  border-color: var(--purple);
+}
+
+.game-art {
+  height: 105px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 13px;
+  background: radial-gradient(circle, #513074, #1a1029 72%);
+  font-size: 47px;
+}
+
+.game-card:nth-child(2) .game-art {
+  background: radial-gradient(circle, #244a69, #101725 72%);
+}
+
+.game-card:nth-child(3) .game-art {
+  background: radial-gradient(circle, #454077, #171329 72%);
+}
+
+.game-card:nth-child(4) .game-art {
+  background: radial-gradient(circle, #56407a, #171126 72%);
+}
+
+.game-name {
+  margin-top: 13px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.game-desc {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.game-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 11px;
+  border-top: 1px solid #30223f;
+  color: #d0a5ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #47315e;
+  border-radius: 15px;
+  background: #191126;
+}
+
+.notice-icon {
+  font-size: 21px;
+}
+
+.notice-title {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notice-desc {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.footer {
+  margin-top: 35px;
+  padding: 22px 0 5px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 10px;
+  line-height: 2;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 4px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: rgba(16, 11, 27, .97);
+  backdrop-filter: blur(16px);
+}
+
+.nav-item {
+  min-width: 53px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: #9e92b0;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+.nav-item.active {
+  color: #d0a0ff;
+}
+
+.nav-item.order-nav {
+  margin-top: -19px;
+}
+
+.nav-item.order-nav .nav-icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  border: 4px solid var(--bg);
+  border-radius: 15px;
+  background: linear-gradient(135deg, #bd78ff, #792cff);
+  color: white;
+  box-shadow: 0 0 20px #923fff50;
+}
+
+@media (min-width: 600px) {
+  .container {
+    width: min(100% - 40px, 480px);
+  }
+
+  .hero {
+    padding: 35px 28px;
+  }
+}

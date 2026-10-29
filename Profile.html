@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - VAN GAME STORE</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #090812;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding-bottom: 30px;
+    }
+
+    header {
+      padding: 20px 16px;
+      background: #141020;
+      border-bottom: 1px solid #39205e;
+      text-align: center;
+    }
+
+    header h2 {
+      margin: 0;
+      color: #c084fc;
+      font-size: 22px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 18px;
+      margin: auto;
+    }
+
+    .profile-card {
+      background: #151020;
+      border: 1px solid #39205e;
+      border-radius: 18px;
+      padding: 24px 18px;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    .avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      background: #2a1642;
+      border: 2px solid #a855f7;
+    }
+
+    h1 {
+      font-size: 21px;
+      margin: 10px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .email {
+      color: #bba9d4;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .status {
+      margin-top: 14px;
+      color: #fbbf24;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .menu {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .menu a,
+    .menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #342443;
+      background: #171321;
+    }
+
+    .menu a:active,
+    .menu button:active {
+      background: #382052;
+    }
+
+    .menu button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .logout {
+      background: #381721 !important;
+      border-color: #773043 !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .note {
+      margin-top: 20px;
+      color: #8e849e;
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h2>VAN GAME STORE</h2>
+  </header>
+
+  <main class="container">
+    <section class="profile-card">
+      <div class="avatar">👤</div>
+
+      <h1 id="profileName">Loading...</h1>
+      <div class="email" id="profileEmail"></div>
+      <div class="status" id="profileStatus">
+        Firebase Account ကို စစ်ဆေးနေပါတယ်...
+      </div>
+    </section>
+
+    <nav class="menu">
+      <a href="index.html">🏠 Home</a>
+      <a href="shop.html">🎮 Game Shop</a>
+      <a href="order.html">🛒 Order တင်ရန်</a>
+      <a href="orders.html">📦 My Orders</a>
+      <a href="wallet.html">💰 My Wallet</a>
+      <a href="login.html" id="loginLink">🔐 Login / Register</a>
+
+      <button type="button" id="logoutBtn" class="logout hidden">
+        🚪 Logout
+      </button>
+    </nav>
+
+    <p class="note">
+      VAN GAME STORE<br>
+      Black + Purple Gaming Design
+    </p>
+  </main>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+    const profileStatus = document.getElementById("profileStatus");
+    const loginLink = document.getElementById("loginLink");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        profileName.textContent = "My Profile";
+        profileEmail.textContent = user.email || "";
+        profileStatus.textContent = "✅ Login ဝင်ထားပါတယ်";
+        profileStatus.style.color = "#86efac";
+
+        loginLink.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+      } else {
+        profileName.textContent = "Guest User";
+        profileEmail.textContent = "";
+        profileStatus.textContent = "Login မဝင်ရသေးပါ။ Account ဝင်ပါ။";
+        profileStatus.style.color = "#fbbf24";
+
+        loginLink.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (error) {
+        profileStatus.textContent =
+          "Logout Error: " + error.code;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAN GAME STORE - Login</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #090812;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      padding: 26px;
+      border: 1px solid #39205e;
+      border-radius: 20px;
+      background: #141020;
+      box-shadow: 0 0 30px #761cff20;
+    }
+    h1 {
+      text-align: center;
+      color: #b77bff;
+      font-size: 25px;
+      margin: 0 0 8px;
+    }
+    .sub {
+      text-align: center;
+      color: #aaa2b9;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      color: #ddd3ef;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      background: #0c0a13;
+      color: white;
+      border: 1px solid #413052;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+    }
+    input:focus { border-color: #a855f7; }
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 13px;
+      margin-top: 15px;
+      background: #9333ea;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.secondary {
+      margin-top: 9px;
+      background: #282035;
+      border: 1px solid #49345f;
+    }
+    button:disabled { opacity: .6; }
+    #message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+    .links {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    a { color: #c084fc; text-decoration: none; }
+    .small { color: #938aa3; font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>VAN GAME STORE</h1>
+    <div class="sub" id="heading">Login ဝင်ရန်</div>
+
+    <form id="authForm">
+      <label for="email">Email</label>
+      <input id="email" type="email"
+        placeholder="example@gmail.com" required autocomplete="email">
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+        placeholder="အနည်းဆုံး 6 လုံး" minlength="6"
+        required autocomplete="current-password">
+
+      <button id="submitBtn" type="submit">Login ဝင်မယ်</button>
+    </form>
+
+    <button class="secondary" id="toggleBtn" type="button">
+      Account အသစ်ဖွင့်မယ်
+    </button>
+
+    <button class="secondary" id="resetBtn" type="button">
+      Password မေ့သွားလား?
+    </button>
+
+    <button class="secondary" id="logoutBtn" type="button" hidden>
+      Logout
+    </button>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <div class="links">
+      <a href="index.html">← Home ကိုပြန်သွားမယ်</a>
+    </div>
+    <p class="small">Secure account powered by Firebase Authentication</p>
+  </main>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import {
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    const form = document.getElementById("authForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const message = document.getElementById("message");
+    const heading = document.getElementById("heading");
+
+    let isRegister = false;
+
+    function showMessage(text, success = false) {
+      message.textContent = text;
+      message.style.color = success ? "#86efac" : "#fca5a5";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      isRegister = !isRegister;
+      heading.textContent = isRegister
+        ? "Account အသစ်ဖွင့်ရန်"
+        : "Login ဝင်ရန်";
+      submitBtn.textContent = isRegister
+        ? "Register လုပ်မယ်"
+        : "Login ဝင်မယ်";
+      toggleBtn.textContent = isRegister
+        ? "Login ပြန်ဝင်မယ်"
+        : "Account အသစ်ဖွင့်မယ်";
+      passwordInput.autocomplete = isRegister
+        ? "new-password"
+        : "current-password";
+      showMessage("");
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      submitBtn.disabled = true;
+      showMessage("ခဏစောင့်ပါ...");
+
+      try {
+        if (isRegister) {
+          await createUserWithEmailAndPassword(
+            auth, email, password
+          );
+showMessage("Login အောင်မြင်ပါပြီ! Profile ကိုသွားနေပါပြီ။", true);
+
+window.location.replace("./profile.html");
+        } else {
+          await signInWithEmailAndPassword(
+            auth, email, password
+          );
+          showMessage("Login အောင်မြင်ပါပြီ!", true);
+        }
+      } catch (error) {
+        const errors = {
+          "auth/email-already-in-use":
+            "ဒီ Email နဲ့ Account ရှိပြီးသားပါ။ Login ဝင်ပါ။",
+          "auth/invalid-email":
+            "Email ပုံစံ မမှန်ပါ။",
+          "auth/invalid-credential":
+            "Email သို့မဟုတ် Password မှားနေပါတယ်။",
+          "auth/weak-password":
+            "Password အနည်းဆုံး 6 လုံးထားပါ။",
+          "auth/too-many-requests":
+            "ကြိုးစားမှုများနေပါတယ်။ ခဏစောင့်ပြီး ပြန်လုပ်ပါ။",
+          "auth/network-request-failed":
+            "Internet Connection ကို စစ်ပါ။",
+          "auth/operation-not-allowed":
+            "Firebase Console မှာ Email/Password ကို စစ်ပါ။"
+        };
+
+        showMessage(
+          errors[error.code] ||
+          "Error: " + error.code
+        );
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    resetBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        showMessage("အရင်ဆုံး Email ထည့်ပေးပါ။");
+        emailInput.focus();
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage(
+          "Password ပြန်သတ်မှတ်ရန် Email ပို့ပြီးပါပြီ။ Inbox/Spam ကိုစစ်ပါ။",
+          true
+        );
+      } catch (error) {
+        showMessage("Password Reset Error: " + error.code);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        showMessage("Logout လုပ်ပြီးပါပြီ။", true);
+      } catch (error) {
+        showMessage("Logout Error: " + error.code);
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      logoutBtn.hidden = !user;
+
+      if (user) {
+        showMessage("ဝင်ထားသော Account: " + user.email, true);
+      }
+    });
+  </script>
+</body>
+</html>
